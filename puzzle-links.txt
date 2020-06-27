@@ -1,0 +1,19 @@
+# Links
+
+http://www.sudocue.net
+
+# backtracking algorithm
+
+1. Start with 1 in first 0
+2. Check if row / column / box already contains 1. 
+2a. if yes, start over with 2
+2b. if no, go to next zero starting 
+
+if x > 9 we must start over at the next increment
+
+1. Find next 0
+2. i starts at 1, if i gets to 9 start the puzzle over at 1 
+4a. if yes, go to 2 and increment i++
+4b. if no, go to 1
+
+
