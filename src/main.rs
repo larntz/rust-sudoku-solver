@@ -1,10 +1,9 @@
-use anyhow::Result;
 use std::fs::File;
 use std::io::prelude::*;
 use std::io::BufReader;
 use std::time::Instant;
 
-fn main() -> Result<()> {
+fn main() -> Result<(), std::io::Error> {
     println!("Let's Sudoku!");
     let file = File::open("puzzles.txt")?;
     let lines = BufReader::new(file).lines();
@@ -91,7 +90,6 @@ fn check_column(sudoku_board: [u8; 81], index: usize, digit: u8) -> bool {
     if matches > 0 {
         return false;
     }
-
     true
 }
 
@@ -107,7 +105,6 @@ fn check_row(sudoku_board: [u8; 81], index: usize, digit: u8) -> bool {
     if matches > 0 {
         return false;
     }
-
     true
 }
 
@@ -124,7 +121,6 @@ fn print_board(sudoku_board: &[u8; 81]) {
             print!("---------------------\n");
         }
     }
-
     std::io::stdout().flush().unwrap();
     println!("");
 }
