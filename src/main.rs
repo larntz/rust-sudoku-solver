@@ -1,26 +1,40 @@
 use anyhow::Result;
+use std::fs::File;
 use std::io::prelude::*;
+use std::io::BufReader;
 use std::time::Instant;
 
 fn main() -> Result<()> {
-    print!("Let's Sudoku!\nEnter puzzle: ");
-    let mut puzzle = String::new();
-    std::io::stdout().flush().unwrap();
-    let _ = std::io::stdin().read_line(&mut puzzle).unwrap();
-    let mut sudoku_board = [0u8; 81];
-    let mut index = 0;
-    for digit in puzzle.trim().chars().into_iter() {
-        sudoku_board[index] = digit.to_digit(10).unwrap() as u8;
-        index += 1;
+    println!("Let's Sudoku!");
+    let file = File::open("puzzles.txt")?;
+    let lines = BufReader::new(file).lines();
+    let run_start = Instant::now();
+
+    for line in lines {
+        let puzzle = line.unwrap();
+        let mut sudoku_board = [0u8; 81];
+        let mut index = 0;
+        for digit in puzzle.trim().chars().into_iter() {
+            sudoku_board[index] = digit.to_digit(10).unwrap() as u8;
+            index += 1;
+        }
+
+        let start_time = Instant::now();
+        let answer = solve(sudoku_board);
+        let duration = start_time.elapsed();
+
+        println!("\nCalculated solution in {}ms\n\n", duration.as_millis());
+        println!("Puzzle:   {}", puzzle);
+        print!("Solution: ");
+        for ch in answer.1.iter() {
+            print!("{}", ch);
+        }
+        println!("\n");
+        print_board(&answer.1);
     }
 
-    let start_time = Instant::now();
-    let answer = solve(sudoku_board);
-    let duration = start_time.elapsed();
-
-    println!("\nCalculated solution in {}ms\n\n", duration.as_millis());
-    print_board(&answer.1);
-
+    let run_duration = run_start.elapsed();
+    println!("\nTotal processing time {}ms", run_duration.as_millis());
     Ok(())
 }
 
